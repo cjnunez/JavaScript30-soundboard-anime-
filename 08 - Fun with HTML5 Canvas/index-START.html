@@ -1,19 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>HTML5 Canvas</title>
-</head>
-<body>
-<canvas id="draw" width="800" height="800"></canvas>
-<script>
-</script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Canvas</title>
+  </head>
+  <body>
+    <!-- This canvas tag is what creates the platform to draw 
+    shapes and other things on you can set the initial height and 
+  width too but leter you can make it so its the width of the window 
+the canvas is occupied in -->
+    <canvas id="draw" width="800" height="800"></canvas>
+    <script>
+      const canvas = document.querySelector("#draw");
 
-<style>
-  html, body {
-    margin: 0;
-  }
-</style>
+      const ctx = canvas.getContext("2d"); // setting the canvas to 2d eventually would love to try the 3d canvas
+      canvas.width = window.innerWidth; //setting the canvas width to the width of the window
+      canvas.height = window.innerHeight; // setting the canvas height to the height of the window
+      ctx.strokeStyle = "#BADA55"; // setting the stroke style
+      ctx.lineJoin = "round"; // ctx lineJoin determines the shape used to join two line segments and where they meet
+      ctx.lineCap = "round"; // lineCap is a property to determine the shape used to draw lines
+      ctx.lineWidth = 100; //sets the initial width of the line
+      ctx.globalCompositeOperation = "multiply"; //added this at the end kind of hard to explain :/
 
-</body>
+      let isDrawing = false; //setting a variable to false that helps to start the draw function
+      let lastX = 0; // sets lastX to 0 to start drawing at the top left of the canvas
+      let lastY = 0; // sets lastY to 0 to start drawing at the top left of the canvas
+      let hue = 0; // set hue to 0 to help with incrementing color
+      let direction = true;
+
+      function draw(e) {
+        if (!isDrawing) return; //stop the function from running when mouse isn't down
+        // console.log(e);
+        ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`; //changing the stroke style to allow for changes in color
+        ctx.beginPath(); // starts the path of your first line
+        // start from
+        ctx.moveTo(lastX, lastY); //moves the line point of X and Y
+        // go to
+        ctx.lineTo(e.offsetX, e.offsetY); //offsets X and Y to show where to move the line to
+        ctx.stroke(); // method of 2d canvas strokes to the current or given path of stroke style
+        lastX = e.offsetX; // changing lastX to move the line to new position
+        lastY = e.offsetY; // changing lastY to move the line to new position
+        hue++; // increments the hue variable to change the color
+
+        //this if statement will reset the hue once the hue is higher than 360
+        if (hue >= 360) {
+          hue = 0;
+        }
+        // this if statement keeps the line width between 1 and 100
+        if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+          direction = !direction;
+        }
+        // this if statement either adds or subtacts to the line width based on whether direction is true or false
+        if (direction) {
+          ctx.lineWidth++;
+        } else {
+          ctx.lineWidth--;
+        }
+      }
+
+      canvas.addEventListener("mousedown", e => {
+        //this function listens for instance of mousedown and sets isDrawing to true to start drawing
+        isDrawing = true;
+
+        // [lastX, lastY] = [e.offsetX, e.offsetY];
+        lastX = e.offsetX; //setting the X on the canvas to the offset so the line starts where the mouse is
+        lastY = e.offsetY; //setting the Y on the canvas to the offset so the line starts where the mouse is
+      });
+
+      canvas.addEventListener("mousemove", draw); // Listening for instance of mousemove to start the draw function
+      canvas.addEventListener("mousedown", () => (isDrawing = true)); // listens for mouse down to change isDrawing to true to start the draw function
+      canvas.addEventListener("mouseup", () => (isDrawing = false)); // listens for mouse up to change isDrawing to false to stop the drawing function
+    </script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+    </style>
+  </body>
 </html>
