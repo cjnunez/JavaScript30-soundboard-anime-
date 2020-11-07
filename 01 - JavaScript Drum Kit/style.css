@@ -1,15 +1,23 @@
 html {
   font-size: 10px;
-  background-image: url(images/matt-popovich-0FZrPECK5cg-unsplash.jpg);
-  background-size: cover;
+  /* background-image: url(images/matt-popovich-0FZrPECK5cg-unsplash.jpg); */
+  /* background-size: cover; */
+  margin: 0;
+  padding: 0;
 }
 
-body,
+body {
+  background-image: url(images/matt-popovich-0FZrPECK5cg-unsplash.jpg);
+  background-size: cover;
+  margin: 0; 
+}
+
+/* body,
 html {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-}
+} */
 
 .keys {
   display: flex;
